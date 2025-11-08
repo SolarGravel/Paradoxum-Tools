@@ -4,6 +4,7 @@ import streamlit as st
 import pandas
 import calculations
 from pandas import DataFrame
+from math import ceil
 
 artifacts_df: DataFrame = pandas.read_csv("artifacts.csv")
 
@@ -28,8 +29,10 @@ def change_craft() -> None:
     price_str: str = calculations.get_price_str(craft_ingredients, additional_price)
     craft_prices: list[int] = [v["price"] * v["amount"] for v in craft_ingredients.values()]
 
-    st.session_state["price_text"] = f"Prices: {price_str}"
-    st.session_state["total_text"] = f"Total: {sum(craft_prices) + additional_price} J$"
+    total: int = sum(craft_prices) + additional_price
+
+    st.session_state["price_text"] = f"Craft: {price_str}"
+    st.session_state["total_text"] = f"***Cost***: {total} J$ *({ceil(total/2)} J$ Sell)*"
     st.session_state["craft_ingredients"] = craft_ingredients
 
 
