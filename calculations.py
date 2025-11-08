@@ -1,3 +1,35 @@
+stats_names: dict[str, str] = {
+    "hp": "Max HP",
+    "hp/s%": "HP Regeneration%",
+    "protection": "Physicial Protection",
+    "barrier": "Magic Barrier",
+    "resilience": "Condition Resilience%",
+    "ms": "Move Speed",
+    "ms%": "Move Speed%",
+    "runspd": "Run Speed%",
+    "st/s": "Stamina Regeneration",
+    "evasion": "Evasion%",
+    "wp": "Weapon Power",
+    "atk/s": "Attack Speed%",
+    "atkrange": "Attack Range",
+    "physvamp": "Life Steal%",
+    "physpen": "Physical Penetration",
+    "physpen%": "Physical Shreding%",
+    "flux": "Flux",
+    "spellrange": "Spell Range%",
+    "cdr": "Cooldown Reduction",
+    "magvamp": "Soul Steal%",
+    "magpen": "Magic Penetration",
+    "magpen%": "Magic Shreding%",
+    "bless": "Blessing%",
+    "sp/s": "Spirit Regeneration",
+    "sp/s%": "Spirit Regeneration%",
+    "energy": "Energy",
+    "ammo": "Ammo%",
+    "crit": "Critical Damage%",
+    "luck": "Luck%"
+}
+
 def get_price_str(craft_items: dict[str, dict[str, int]], additional_price: int) -> str:
     result_str: str = ""
 

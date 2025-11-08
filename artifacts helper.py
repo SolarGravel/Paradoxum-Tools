@@ -10,6 +10,7 @@ artifacts_df: DataFrame = pandas.read_csv("artifacts.csv")
 
 ingredients: list[str] = []
 additional_price: int = 0
+stats: dict[str, float] = {}
 
 
 def change_craft() -> None:
@@ -27,26 +28,33 @@ def change_craft() -> None:
         }
 
     price_str: str = calculations.get_price_str(craft_ingredients, additional_price)
-    craft_prices: list[int] = [v["price"] * v["amount"] for v in craft_ingredients.values()]
+    craft_prices: list[int] = [
+        v["price"] * v["amount"] for v in craft_ingredients.values()
+    ]
 
     total: int = sum(craft_prices) + additional_price
 
     st.session_state["price_text"] = f"Craft: {price_str}"
-    st.session_state["total_text"] = f"***Cost***: {total} J$ *({ceil(total/2)} J$ Sell)*"
+    st.session_state["total_text"] = (
+        f"***Cost***: {total} J$ *({ceil(total / 2)} J$ Sell)*"
+    )
     st.session_state["craft_ingredients"] = craft_ingredients
 
 
 st.title("New Artifact.", help="You need help making a new one?")
-st.header("Craft", divider="gray")
 
 with st.container(key="craft"):
+    st.header("Craft", divider="gray")
+    
     st.multiselect(
         "Craft Items:", key="craft_list", options=artifacts_df, on_change=change_craft
     )
 
     st.session_state["price_text"] = st.session_state.get("price_text", "Price:")
     st.session_state["total_text"] = st.session_state.get("total_text", "Total:")
-    st.session_state["craft_ingredients"] = st.session_state.get("craft_ingredients", {})
+    st.session_state["craft_ingredients"] = st.session_state.get(
+        "craft_ingredients", {}
+    )
 
     craft_ingredients: dict[str, dict[str, int]] = st.session_state["craft_ingredients"]
 
@@ -75,3 +83,20 @@ with st.container(key="craft"):
 
     total_label = st.empty()
     total_label.text(st.session_state["total_text"])
+
+with st.container(key="stats"):
+    st.header("Stats", divider="gray")
+    
+    for ingredient in craft_ingredients:
+        artifact: DataFrame = artifacts_df[artifacts_df["name"] == ingredient]
+        
+        for stat, name in calculations.stats_names.items():
+            print(f"{stat}: {name}")
+            
+            if not pandas.isna(artifact[stat].values[0]):
+                if name in stats:
+                    stats[name] += artifact[stat].values[0].item()
+                else:
+                    stats[name] = artifact[stat].values[0].item()
+        
+        print(stats)
