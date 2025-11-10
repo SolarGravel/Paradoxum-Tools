@@ -1,4 +1,5 @@
 # streamlit run "c:/Users/three/Documents/Desenvolvimento/Paradoxum Helper/artifacts helper.py"
+# streamlit run "c:/Users/12725158143/Documents/Github/Paradoxum-Helper/artifacts helper.py"
 
 import streamlit as st
 import pandas
@@ -7,6 +8,7 @@ from pandas import DataFrame
 from math import ceil
 
 artifacts_df: DataFrame = pandas.read_csv("artifacts.csv")
+stats_df: DataFrame = pandas.read_csv("stats.csv")
 
 ingredients: list[str] = []
 additional_price: int = 0
@@ -68,6 +70,7 @@ with st.container(key="craft"):
                 min_value=1,
                 value=1,
                 on_change=change_craft,
+                icon=":material/diamond_shine:",
             )
 
     additional_price = st.number_input(
@@ -76,6 +79,7 @@ with st.container(key="craft"):
         min_value=0,
         value=0,
         on_change=change_craft,
+        icon=":material/money_bag:",
     )
 
     prices_label = st.empty()
@@ -90,13 +94,13 @@ with st.container(key="stats"):
     for ingredient in craft_ingredients:
         artifact: DataFrame = artifacts_df[artifacts_df["name"] == ingredient]
         
-        for stat, name in calculations.stats_names.items():
-            print(f"{stat}: {name}")
-            
+        stats_names = dict(zip(stats_df["stat"], stats_df["name"]))
+        
+        for stat, name in stats_names.items():
             if not pandas.isna(artifact[stat].values[0]):
                 if name in stats:
                     stats[name] += artifact[stat].values[0].item()
                 else:
                     stats[name] = artifact[stat].values[0].item()
         
-        print(stats)
+        
