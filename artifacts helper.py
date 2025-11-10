@@ -92,32 +92,41 @@ with st.container(key="stats"):
     st.header("Stats", divider="gray")
 
     for ingredient in craft_ingredients:
-        artifact: DataFrame = artifacts_df[artifacts_df["name"] == ingredient]
+        for i in range(craft_ingredients[ingredient]["amount"]):
+            artifact: DataFrame = artifacts_df[artifacts_df["name"] == ingredient]
 
-        stats_names = dict(zip(stats_df["stat"], stats_df["name"]))
-        
-        for stat, name in stats_names.items():
-            if not pandas.isna(artifact[stat].values[0]):
-                if name in item_stats:
-                    item_stats[name] += artifact[stat].values[0].item()
-                else:
-                    item_stats[name] = artifact[stat].values[0].item()
+            stats_names = dict(zip(stats_df["stat"], stats_df["name"]))
 
-        for stat, value in item_stats.items():
-            stat_col, input_col, total_col = st.columns(3, vertical_alignment="center")
+            for stat, name in stats_names.items():
+                if not pandas.isna(artifact[stat].values[0]):
+                    if name in item_stats:
+                        item_stats[name] += artifact[stat].values[0].item()
+                    else:
+                        item_stats[name] = artifact[stat].values[0].item()
 
-            with stat_col:
-                st.write(f"**{stat}**: {value}")
-            
-            with input_col:
-                additional_stat = st.number_input(
-                    "Additional Stat",
-                    key=f"{stat}_stat",
-                    min_value=0.0,
-                    value=0.0,
-                    on_change=change_craft,
-                    icon=f":material/{stats_df[stats_df['name'] == stat]['icon'].values[0]}:",
-                )
-            
-            with total_col:
-                st.write(f"**{value + additional_stat}**")
+    for stat, value in item_stats.items():
+        stat_col, input_col, total_col = st.columns(
+            3, vertical_alignment="center", width=550
+        )
+
+        with stat_col:
+            if stat[-1] == "%":
+                st.write(f"**{stat}**: {value*100}%")
+            else:
+                st.write(f"**{stat}**: {int(value)}")
+
+        with input_col:
+            additional_stat = st.number_input(
+                "Additional Stat",
+                key=f"{stat}{i}_stat",
+                min_value=0.0,
+                value=0.0,
+                on_change=change_craft,
+                icon=f":material/{stats_df[stats_df['name'] == stat]['icon'].values[0]}:",
+            )
+
+        with total_col:
+            if stat[-1] == "%": 
+                st.write(f"Total: **{value + additional_stat * 100}%**")
+            else:
+                st.write(f"Total: **{int(value + additional_stat)}**")
