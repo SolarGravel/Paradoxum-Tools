@@ -12,7 +12,7 @@ stats_df: DataFrame = pandas.read_csv("stats.csv")
 
 ingredients: list[str] = []
 additional_price: int = 0
-stats: dict[str, float] = {}
+item_stats: dict[str, float] = {}
 
 
 def change_craft() -> None:
@@ -47,7 +47,7 @@ st.title("New Artifact.", help="You need help making a new one?")
 
 with st.container(key="craft"):
     st.header("Craft", divider="gray")
-    
+
     st.multiselect(
         "Craft Items:", key="craft_list", options=artifacts_df, on_change=change_craft
     )
@@ -90,17 +90,34 @@ with st.container(key="craft"):
 
 with st.container(key="stats"):
     st.header("Stats", divider="gray")
-    
+
     for ingredient in craft_ingredients:
         artifact: DataFrame = artifacts_df[artifacts_df["name"] == ingredient]
-        
+
         stats_names = dict(zip(stats_df["stat"], stats_df["name"]))
         
         for stat, name in stats_names.items():
             if not pandas.isna(artifact[stat].values[0]):
-                if name in stats:
-                    stats[name] += artifact[stat].values[0].item()
+                if name in item_stats:
+                    item_stats[name] += artifact[stat].values[0].item()
                 else:
-                    stats[name] = artifact[stat].values[0].item()
-        
-        
+                    item_stats[name] = artifact[stat].values[0].item()
+
+        for stat, value in item_stats.items():
+            stat_col, input_col, total_col = st.columns(3, vertical_alignment="center")
+
+            with stat_col:
+                st.write(f"**{stat}**: {value}")
+            
+            with input_col:
+                additional_stat = st.number_input(
+                    "Additional Stat",
+                    key=f"{stat}_stat",
+                    min_value=0.0,
+                    value=0.0,
+                    on_change=change_craft,
+                    icon=f":material/{stats_df[stats_df['name'] == stat]['icon'].values[0]}:",
+                )
+            
+            with total_col:
+                st.write(f"**{value + additional_stat}**")

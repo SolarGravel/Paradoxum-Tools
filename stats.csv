@@ -10,7 +10,7 @@ runspd,4000,Run Speed%,sprint
 st/s,200,Stamina Regeneration,restart_alt
 evasion,,Evasion%,arrows_more_up
 wp,30,Weapon Power,surgical
-atk/s%,3500,Attack Speed%,blur_medium
+atk/s,3500,Attack Speed%,blur_medium
 atkrange,,Attack Range,target
 physvamp,5000,Life Steal%,bloodtype
 physpen,40,Physical Penetration,link_off
