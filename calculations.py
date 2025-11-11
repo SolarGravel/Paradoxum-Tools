@@ -1,3 +1,8 @@
+import pandas
+from pandas import DataFrame
+
+stats_df: DataFrame = pandas.read_csv("stats.csv")
+
 def get_price_str(craft_items: dict[str, dict[str, int]], additional_price: int) -> str:
     result_str: str = ""
 
@@ -9,8 +14,10 @@ def get_price_str(craft_items: dict[str, dict[str, int]], additional_price: int)
 
     return result_str
 
+def get_stat_price(stat: str, value: float) -> float:
+    stat_df = stats_df[stats_df["name"] == stat]
+    
+    return int(stat_df["price"].values[0]) * value
 
 if __name__ == "__main__":
-    test_items = {"A": {"amount": 1, "price": 100}, "B": {"amount": 2, "price": 250}}
-
-    print(get_price_str(test_items, 100))
+    print(get_stat_price("Weapon Power", 60))
