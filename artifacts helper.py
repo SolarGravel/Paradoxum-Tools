@@ -188,14 +188,14 @@ with st.container(key="stats"):
             if stat in additional_stats:
                 del additional_stats[stat]
 
-            st.text(f"  - *{stat}: {stat_prices[len(stat_prices) - 1]} J$*")
+            st.text(f"  - *{stat}: {round(stat_prices[len(stat_prices) - 1])} J$*")
 
         for stat in additional_stats:
             stat_prices.append(
                 calculations.get_stat_price(stat, additional_stats[stat])
             )
 
-            st.text(f"  - *{stat}: {stat_prices[len(stat_prices) - 1]} J$*")
+            st.text(f"  - *{stat}: {round(stat_prices[len(stat_prices) - 1])} J$*")
 
     total_price: int = st.session_state["total_price"]
     
