@@ -19,5 +19,11 @@ def get_stat_price(stat: str, value: float) -> float:
     
     return int(stat_df["price"].values[0]) * value
 
+def get_percent_protection(protection: int) -> float:
+    return protection / (100 + protection)
+
+def get_effective_hp(hp: int, protection: int) -> int:
+    return round(hp * (100 + protection) / 100)
+
 if __name__ == "__main__":
-    print(get_stat_price("Weapon Power", 60))
+    print(get_effective_hp(1000, 10))
