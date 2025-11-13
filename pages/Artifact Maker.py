@@ -3,12 +3,12 @@
 
 import streamlit as st
 import pandas
-import calculations
+import tools
 from pandas import DataFrame
 from math import ceil
 
-artifacts_df: DataFrame = pandas.read_csv("artifacts.csv")
-stats_df: DataFrame = pandas.read_csv("stats.csv")
+artifacts_df: DataFrame = pandas.read_csv("data/artifacts.csv")
+stats_df: DataFrame = pandas.read_csv("data/stats.csv")
 
 ingredients: list[str] = []
 additional_price: int = 0
@@ -37,7 +37,7 @@ def change_item() -> None:
             .item(),
         }
 
-    price_str: str = calculations.get_price_str(craft_ingredients, additional_price)
+    price_str: str = tools.get_price_str(craft_ingredients, additional_price)
     craft_prices: list[int] = [
         v["price"] * v["amount"] for v in craft_ingredients.values()
     ]
@@ -182,7 +182,7 @@ with st.container(key="stats"):
 
         for stat, value in ingredient_stats.items():
             stat_prices.append(
-                calculations.get_stat_price(stat, value + additional_stats[stat])
+                tools.get_stat_price(stat, value + additional_stats[stat])
             )
             
             if stat in additional_stats:
@@ -192,7 +192,7 @@ with st.container(key="stats"):
 
         for stat in additional_stats:
             stat_prices.append(
-                calculations.get_stat_price(stat, additional_stats[stat])
+                tools.get_stat_price(stat, additional_stats[stat])
             )
 
             st.text(f"  - *{stat}: {round(stat_prices[len(stat_prices) - 1])} J$*")

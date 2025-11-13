@@ -1,7 +1,7 @@
 import pandas
 from pandas import DataFrame
 
-stats_df: DataFrame = pandas.read_csv("stats.csv")
+stats_df: DataFrame = pandas.read_csv("data/stats.csv")
 
 def get_price_str(craft_items: dict[str, dict[str, int]], additional_price: int) -> str:
     result_str: str = ""
