@@ -161,40 +161,54 @@ with st.container(key="defense"):
 with st.container(key="result"):
     st.header("Result", divider="grey")
 
-    if "damage" and "defense" in stats:
-        defense_stats: DefenseStats = stats["defense"]
+    defense_stats: DefenseStats = stats["defense"]
+    damage_stats: DamageTypes = stats["damage"]
 
-        damages = tools.get_damages(stats["damage"], defense_stats)
+    damages = tools.get_damages(damage_stats, defense_stats)
 
-        total_damage = sum(damages)
+    total_damage = sum(damages)
 
-        st.write(f"*Physical Damage*: {damages[0]}")
-        st.write(f"*Magic Damage*: {damages[1]}")
-        st.write(f"*True Damage*: {damages[2]}")
-        st.write(f"**Total Damage**: {total_damage}\n")
+    st.write(f"*Physical Damage*: {damages[0]}")
+    st.write(f"*Magic Damage*: {damages[1]}")
+    st.write(f"*True Damage*: {damages[2]}")
+    st.write(f"**Total Damage**: {total_damage}\n")
 
-        remainging_hp: str | float = defense_stats.hp - total_damage
-        remainging_hp = "**0**" if remainging_hp <= 0 else remainging_hp
+    remainging_hp: str | float = defense_stats.hp - total_damage
+    remainging_hp = "**0**" if remainging_hp <= 0 else remainging_hp
 
-        st.write(f"Remaining HP: {remainging_hp}")
+    st.write(f"Remaining HP: {remainging_hp}")
 
     with st.expander("info"):
-        if "defense" in stats:
-            defense_stats: DefenseStats = stats["defense"]
+        effective_protection = round(
+            tools.get_effective_protection(
+                defense_stats.protection,
+                damage_stats.physic.penetration,
+                damage_stats.physic.shredding,
+            )
+        )
+        
+        effective_barrier = round(
+            tools.get_effective_protection(
+                defense_stats.barrier,
+                damage_stats.magic.penetration,
+                damage_stats.magic.shredding,
+            )
+        )
 
-            st.write(
-                f"- **Physical Protection%**: {round(tools.get_percent_protection(defense_stats.protection) * 100, 2)}%"
-            )
-            st.write(
-                f"- **Effective Physical HP**: {tools.get_effective_hp(defense_stats.hp, defense_stats.protection)}"
-            )
+        st.write(
+            f"- **Physical Protection%**: {round(tools.get_percent_protection(effective_protection) * 100, 2)}%"
+        )
 
-            st.write(
-                f"- **Magic Barrier%**: {round(tools.get_percent_protection(defense_stats.barrier) * 100, 2)}%"
-            )
-            st.write(
-                f"- **Effective Magic HP**: {tools.get_effective_hp(defense_stats.hp, defense_stats.barrier)}"
-            )
+        st.write(
+            f"- **Effective Physical HP**: {tools.get_effective_hp(defense_stats.hp, effective_protection)}"
+        )
+
+        st.write(
+            f"- **Magic Barrier%**: {round(tools.get_percent_protection(effective_barrier) * 100, 2)}%"
+        )
+        st.write(
+            f"- **Effective Magic HP**: {tools.get_effective_hp(defense_stats.hp, effective_barrier)}"
+        )
 
     with st.expander("dict"):
         st.write(stats)

@@ -55,10 +55,15 @@ def get_percent_protection(protection: float) -> float:
 
 
 def get_effective_hp(hp: int, protection: int) -> int:
-    return round(hp * (100 + protection) / 100)
+    if protection < 0:
+        protection = abs(protection)
+        
+        return round(hp * (.5 + 25 / (protection + 50)))
+    
+    return round(hp * (1 + protection / 100))
 
 
-def get_effective_protection(protection, penetration, shredding) -> float:
+def get_effective_protection(protection: int, penetration: int, shredding: float) -> float:
     return (protection * (1 - shredding)) - penetration
 
 
