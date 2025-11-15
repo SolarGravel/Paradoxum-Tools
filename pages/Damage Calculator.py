@@ -1,17 +1,18 @@
 import streamlit as st
 import tools
-from tools import DamageTypes, DamageStats, DefenseStats
+from tools import Damage, DamageStats, DefenseStats, BasicAtkStats, DamageType
 
 
 st.session_state["stats"] = st.session_state.get(
-    "stats", {"damage": DamageTypes(), "defense": DefenseStats()}
+    "stats",
+    {"damage": Damage(), "defense": DefenseStats(), "dps": BasicAtkStats()},
 )
 
 stats: dict = st.session_state.get("stats", {})
 
 
 def on_change() -> None:
-    damage_stats: DamageTypes = DamageTypes(
+    damage_stats: Damage = Damage(
         physic=DamageStats(
             damage=st.session_state.get("physdam_input", 0),
             penetration=st.session_state.get("physpen_input", 0),
@@ -32,8 +33,19 @@ def on_change() -> None:
         resistance=st.session_state.get("resistance_input", 0.0) / 100,
     )
 
+    basic_stats: BasicAtkStats = BasicAtkStats(
+        dps_damage={
+           DamageType.PHYSICAL: st.session_state.get("dps_damage_input", 0),
+           DamageType.MAGIC: st.session_state.get("mag_dps_damage_input", 0),
+           DamageType.TRUE: st.session_state.get("true_dps_damage_input", 0),
+        },
+        atk_speed=st.session_state.get("dps_input", 0),
+        effect=st.session_state.get("dps_efect_input", 100) / 100,
+    )
+
     st.session_state["stats"]["damage"] = damage_stats
     st.session_state["stats"]["defense"] = defense_stats
+    st.session_state["stats"]["dps"] = basic_stats
 
 
 st.title("Damage Calculator")
@@ -112,6 +124,66 @@ with st.container(key="damage"):
     )
 
 
+with st.container(key="dps"):
+    st.header("Basic Attack", divider="grey")
+
+    phys_col, mag_col = st.columns(2)
+    
+    with phys_col:
+        st.number_input(
+            "Physic Damage:",
+            key="dps_damage_input",
+            min_value=0,
+            value=0,
+            on_change=on_change,
+            width=200,
+            icon=":material/surgical:",
+        )
+    
+    with mag_col:
+        st.number_input(
+            "Magic Damage:",
+            key="mag_dps_damage_input",
+            min_value=0,
+            value=0,
+            on_change=on_change,
+            width=200,
+            icon=":material/visibility:",
+        )
+    
+    st.number_input(
+        "True Damage:",
+        key="true_dps_damage_input",
+        min_value=0,
+        value=0,
+        on_change=on_change,
+        width=200,
+        icon=":material/circle:",
+    )
+
+    st.number_input(
+        "Attack Speed:",
+        key="dps_input",
+        min_value=0.0,
+        value=0.0,
+        on_change=on_change,
+        width=200,
+        icon=":material/speed:",
+    )
+
+    st.number_input(
+        "Effectiveness:",
+        key="dps_efect_input",
+        min_value=0.0,
+        value=100.0,
+        on_change=on_change,
+        width=200,
+        icon=":material/percent:",
+    )
+    
+    st.write(f"DPS: {tools.get_dps(stats['dps'])}")
+
+
 with st.container(key="defense"):
     st.header("Defense", divider="grey")
 
@@ -162,9 +234,10 @@ with st.container(key="result"):
     st.header("Result", divider="grey")
 
     defense_stats: DefenseStats = stats["defense"]
-    damage_stats: DamageTypes = stats["damage"]
+    damage_stats: Damage = stats["damage"]
+    basic_atk_stats: BasicAtkStats = stats["dps"]
 
-    damages = tools.get_damages(damage_stats, defense_stats)
+    damages = tools.get_damages(damage_stats, defense_stats, basic_atk_stats)
 
     total_damage = sum(damages)
 
@@ -186,7 +259,7 @@ with st.container(key="result"):
                 damage_stats.physic.shredding,
             )
         )
-        
+
         effective_barrier = round(
             tools.get_effective_protection(
                 defense_stats.barrier,
