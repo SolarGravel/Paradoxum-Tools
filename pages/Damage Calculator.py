@@ -1,35 +1,36 @@
 import streamlit as st
 import tools
+from tools import DamageTypes, DamageStats, DefenseStats
+
+
+st.session_state["stats"] = st.session_state.get(
+    "stats", {"damage": DamageTypes(), "defense": DefenseStats()}
+)
 
 stats: dict = st.session_state.get("stats", {})
 
-st.session_state["stats"] = st.session_state.get("stats", {})
-
 
 def on_change() -> None:
-    damage_stats: dict = {"phys": {}, "mag": {}}
-    defense_stats: dict = {}
+    damage_stats: DamageTypes = DamageTypes(
+        physic=DamageStats(
+            damage=st.session_state.get("physdam_input", 0),
+            penetration=st.session_state.get("physpen_input", 0),
+            shredding=st.session_state.get("physpen%_input", 0.0) / 100,
+        ),
+        magic=DamageStats(
+            damage=st.session_state.get("magdam_input", 0),
+            penetration=st.session_state.get("magpen_input", 0),
+            shredding=st.session_state.get("magpen%_input", 0.0) / 100,
+        ),
+        true=st.session_state.get("truedam_input", 0),
+    )
 
-    damage_stats = {
-        "phys": {
-            "damage": st.session_state.get("physdam_input", 0),
-            "penetration": st.session_state.get("physpen_input", 0),
-            "shredding": st.session_state.get("physpen%_input", 0.0) / 100,
-        },
-        "mag": {
-            "damage": st.session_state.get("magdam_input", 0),
-            "penetration": st.session_state.get("magpen_input", 0),
-            "shredding": st.session_state.get("magpen%_input", 0.0) / 100,
-        },
-        "true": st.session_state.get("truedam_input"),
-    }
-
-    defense_stats = {
-        "hp": st.session_state.get("hp_input", 0),
-        "protection": st.session_state.get("phys_protec_input", 0),
-        "barrier": st.session_state.get("mag_protec_input", 0),
-        "resistance": st.session_state.get("resistance_input", 0.0) / 100,
-    }
+    defense_stats: DefenseStats = DefenseStats(
+        hp=st.session_state.get("hp_input", 0),
+        protection=st.session_state.get("phys_protec_input", 0),
+        barrier=st.session_state.get("mag_protec_input", 0),
+        resistance=st.session_state.get("resistance_input", 0.0) / 100,
+    )
 
     st.session_state["stats"]["damage"] = damage_stats
     st.session_state["stats"]["defense"] = defense_stats
@@ -160,22 +161,39 @@ with st.container(key="defense"):
 with st.container(key="result"):
     st.header("Result", divider="grey")
 
+    if "damage" and "defense" in stats:
+        defense_stats: DefenseStats = stats["defense"]
+
+        damages = tools.get_damages(stats["damage"], defense_stats)
+
+        total_damage = sum(damages)
+
+        st.write(f"*Physical Damage*: {damages[0]}")
+        st.write(f"*Magic Damage*: {damages[1]}")
+        st.write(f"*True Damage*: {damages[2]}")
+        st.write(f"**Total Damage**: {total_damage}\n")
+
+        remainging_hp: str | float = defense_stats.hp - total_damage
+        remainging_hp = "**0**" if remainging_hp <= 0 else remainging_hp
+
+        st.write(f"Remaining HP: {remainging_hp}")
+
     with st.expander("info"):
         if "defense" in stats:
-            defensive_stats: dict = stats["defense"]
+            defense_stats: DefenseStats = stats["defense"]
 
             st.write(
-                f"- **Physical Protection%**: {round(tools.get_percent_protection(defensive_stats['protection']) * 100, 2)}%"
+                f"- **Physical Protection%**: {round(tools.get_percent_protection(defense_stats.protection) * 100, 2)}%"
             )
             st.write(
-                f"- **Effective Physical HP**: {tools.get_effective_hp(defensive_stats['hp'], defensive_stats['protection'])}"
+                f"- **Effective Physical HP**: {tools.get_effective_hp(defense_stats.hp, defense_stats.protection)}"
             )
-            
+
             st.write(
-                f"- **Magic Barrier%**: {round(tools.get_percent_protection(defensive_stats['barrier']) * 100, 2)}%"
+                f"- **Magic Barrier%**: {round(tools.get_percent_protection(defense_stats.barrier) * 100, 2)}%"
             )
             st.write(
-                f"- **Effective Magic HP**: {tools.get_effective_hp(defensive_stats['hp'], defensive_stats['barrier'])}"
+                f"- **Effective Magic HP**: {tools.get_effective_hp(defense_stats.hp, defense_stats.barrier)}"
             )
 
     with st.expander("dict"):
