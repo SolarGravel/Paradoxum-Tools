@@ -202,7 +202,7 @@ with st.container(key="stats"):
     if total_price != 0:
         efficiency: float = sum(stat_prices) / st.session_state["total_price"]
         
-        st.text(f"- *Total: {sum(stat_prices)} J$. Efficiency of {round(efficiency * 100, 2)}%*")
+        st.text(f"- *Total: {int(sum(stat_prices))} J$. Efficiency of {round(efficiency * 100, 2)}%*")
 
     st.header("Additional Stats")
     st.multiselect(
