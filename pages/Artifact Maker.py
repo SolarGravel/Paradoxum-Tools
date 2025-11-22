@@ -100,7 +100,7 @@ with st.container(key="stats"):
                     value=0.0,
                     on_change=change_item,
                     icon=f":material/{stats_df[stats_df['name'] == stat]['icon'].values[0]}:",
-                )
+                ) / 100
 
             with total_col:
                 st.write(f"Total: **{value * 100 + additional_stats[stat]}%**")
@@ -154,7 +154,7 @@ with st.container(key="stats"):
                     value=0.0,
                     on_change=change_item,
                     icon=f":material/{stats_df[stats_df['name'] == stat]['icon'].values[0]}:",
-                )
+                ) / 100
 
             with total_col:
                 st.write(f"Total: **{additional_stats[stat]}%**")
