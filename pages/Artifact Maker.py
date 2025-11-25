@@ -176,6 +176,8 @@ with st.container(key="stats"):
                 st.write(f"Total: **{int(additional_stats[stat])}**")
 
     stat_prices: list[float] = []
+    
+    st.text("- *The price of each stat:*")
 
     if ingredient_stats or additional_stats:
         for stat, value in ingredient_stats.items():
