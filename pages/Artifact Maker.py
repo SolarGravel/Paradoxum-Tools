@@ -14,6 +14,7 @@ ingredients: list[str] = []
 additional_price: int = 0
 ingredient_stats: dict[str, float] = {}
 additional_stats: dict[str, float] = {}
+float_stats: list[str] = ["Move Speed", "Stamina Regeneration"]
 
 st.session_state["price_text"] = st.session_state.get("price_text", "Price:")
 st.session_state["total_price"] = st.session_state.get("total_price", 0)
@@ -72,7 +73,7 @@ with st.container(key="stats"):
         stat_col, input_col, total_col = st.columns(
             3, vertical_alignment="center", width=550
         )
-        if stat == "Move Speed":
+        if stat in float_stats:
             with stat_col:
                 st.write(f"**{stat}**: {value}")
 
@@ -103,7 +104,7 @@ with st.container(key="stats"):
                 ) / 100
 
             with total_col:
-                st.write(f"Total: **{value * 100 + additional_stats[stat]}%**")
+                st.write(f"Total: **{(value + additional_stats[stat]) * 100}%**")
         else:
             with stat_col:
                 st.write(f"**{stat}**: {int(value)}")
@@ -126,7 +127,7 @@ with st.container(key="stats"):
             3, vertical_alignment="center", width=550
         )
 
-        if stat == "Move Speed":
+        if stat in float_stats:
             with stat_col:
                 st.write(f"**{stat}**: 0.0")
 
@@ -157,7 +158,7 @@ with st.container(key="stats"):
                 ) / 100
 
             with total_col:
-                st.write(f"Total: **{additional_stats[stat]}%**")
+                st.write(f"Total: **{additional_stats[stat] * 100}%**")
         else:
             with stat_col:
                 st.write(f"**{stat}**: 0")
@@ -176,10 +177,10 @@ with st.container(key="stats"):
                 st.write(f"Total: **{int(additional_stats[stat])}**")
 
     stat_prices: list[float] = []
-    
-    st.text("- *The price of each stat:*")
 
     if ingredient_stats or additional_stats:
+        st.text("- *The price of each stat:*")
+        
         for stat, value in ingredient_stats.items():
             stat_prices.append(
                 tools.get_stat_price(stat, value + additional_stats[stat])
