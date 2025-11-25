@@ -5,7 +5,7 @@ protection,20,Physicial Protection,health_and_safety
 barrier,20,Magic Barrier,arming_countdown
 resilience,7000,Condition Resilience%,arming_countdown
 ms,1600,Move Speed,steps
-ms%,6000,Move Speed%,steps
+ms%,6500,Move Speed%,steps
 runspd,3800,Run Speed%,sprint
 st/s,400,Stamina Regeneration,restart_alt
 evasion,,Evasion%,arrows_more_up
