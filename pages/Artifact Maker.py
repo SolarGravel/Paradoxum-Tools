@@ -1,6 +1,3 @@
-# streamlit run "c:/Users/three/Documents/Desenvolvimento/Paradoxum-Helper/artifacts helper.py"
-# streamlit run "c:/Users/12725158143/Documents/Github/Paradoxum-Helper/artifacts helper.py"
-
 import streamlit as st
 import pandas
 import tools
@@ -88,7 +85,7 @@ with st.container(key="stats"):
                 )
 
             with total_col:
-                st.write(f"Total: **{value + additional_stats[stat]}**")
+                st.write(f"Total: **{round(value + additional_stats[stat], 2)}**")
         elif stat[-1] == "%":
             with stat_col:
                 st.write(f"**{stat}**: {value * 100}%")
@@ -104,7 +101,7 @@ with st.container(key="stats"):
                 ) / 100
 
             with total_col:
-                st.write(f"Total: **{(value + additional_stats[stat]) * 100}%**")
+                st.write(f"Total: **{round(value + additional_stats[stat], 4) * 100}%**")
         else:
             with stat_col:
                 st.write(f"**{stat}**: {int(value)}")
