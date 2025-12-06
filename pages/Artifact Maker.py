@@ -39,6 +39,8 @@ def change_item() -> None:
     craft_prices: list[int] = [
         v["price"] * v["amount"] for v in craft_ingredients.values()
     ]
+    
+    tools.stats_df = pandas.read_csv("data/stats.csv")
 
     st.session_state["price_text"] = f"***Craft***: {price_str}"
     st.session_state["total_price"] = sum(craft_prices) + additional_price
@@ -70,7 +72,8 @@ with st.container(key="stats"):
         stat_col, input_col, total_col = st.columns(
             3, vertical_alignment="center", width=550
         )
-        if stat in float_stats:
+        
+        if stat in float_stats or stat[-1] == "%":
             with stat_col:
                 st.write(f"**{stat}**: {value}")
 
@@ -85,23 +88,10 @@ with st.container(key="stats"):
                 )
 
             with total_col:
-                st.write(f"Total: **{round(value + additional_stats[stat], 2)}**")
-        elif stat[-1] == "%":
-            with stat_col:
-                st.write(f"**{stat}**: {value * 100}%")
-
-            with input_col:
-                additional_stats[stat] = st.number_input(
-                    "Additional Stat",
-                    key=f"{stat}_stat",
-                    min_value=0.0,
-                    value=0.0,
-                    on_change=change_item,
-                    icon=f":material/{stats_df[stats_df['name'] == stat]['icon'].values[0]}:",
-                ) / 100
-
-            with total_col:
-                st.write(f"Total: **{round(value + additional_stats[stat], 4) * 100}%**")
+                if stat[-1] == "%":
+                    st.write(f"Total: **{round(value + additional_stats[stat], 2)}%**")
+                else:
+                    st.write(f"Total: **{round(value + additional_stats[stat], 2)}**")
         else:
             with stat_col:
                 st.write(f"**{stat}**: {int(value)}")
@@ -124,7 +114,7 @@ with st.container(key="stats"):
             3, vertical_alignment="center", width=550
         )
 
-        if stat in float_stats:
+        if stat in float_stats or stat[-1] == "%":
             with stat_col:
                 st.write(f"**{stat}**: 0.0")
 
@@ -139,23 +129,10 @@ with st.container(key="stats"):
                 )
 
             with total_col:
-                st.write(f"Total: **{additional_stats[stat]}**")
-        elif stat[-1] == "%":
-            with stat_col:
-                st.write(f"**{stat}**: 0%")
-
-            with input_col:
-                additional_stats[stat] = st.number_input(
-                    "Additional Stat",
-                    key=f"{stat}_stat",
-                    min_value=0.0,
-                    value=0.0,
-                    on_change=change_item,
-                    icon=f":material/{stats_df[stats_df['name'] == stat]['icon'].values[0]}:",
-                ) / 100
-
-            with total_col:
-                st.write(f"Total: **{additional_stats[stat] * 100}%**")
+                if stat[-1] == "%":
+                    st.write(f"Total: **{additional_stats[stat]}%**")
+                else:
+                    st.write(f"Total: **{additional_stats[stat]}**")
         else:
             with stat_col:
                 st.write(f"**{stat}**: 0")

@@ -1,27 +1,27 @@
 stat,price,name,icon
 hp,2.5,Max HP,health_cross
-hp/s%,1500,HP Regeneration%,hr_resting
+hp/s%,15,HP Regeneration%,hr_resting
 protection,20,Physicial Protection,health_and_safety
-barrier,20,Magic Barrier,arming_countdown
-resilience,7000,Condition Resilience%,arming_countdown
+barrier,25,Magic Barrier,arming_countdown
+resilience%,70,Condition Resilience%,arming_countdown
 ms,1600,Move Speed,steps
-ms%,6500,Move Speed%,steps
+ms%,60,Move Speed%,steps
 runspd,3800,Run Speed%,sprint
 st/s,400,Stamina Regeneration,restart_alt
 evasion,,Evasion%,arrows_more_up
-wp,30,Weapon Power,surgical
-atk/s,3500,Attack Speed%,blur_medium
+wp,30,Weapon Damage,surgical
+atk/s%,35,Attack Speed%,blur_medium
 atkrange,,Attack Range,target
-physvamp,5000,Life Steal%,bloodtype
+physvamp%,65,Life Steal%,bloodtype
 physpen,40,Physical Penetration,link_off
 physpen%,,Physical Shreding%,link_off
 flux,20,Flux,visibility
 spellrange,,Spell Range%,target
-cdr,50,Cooldown Reduction,hourglass
+cdr,70,Cooldown Reduction,hourglass
 magvamp,5000,Soul Steal%,digital_wellbeing
 magpen,,Magic Penetration,visibility_off
 magpen%,,Magic Shreding%,visibility_off
-bless,5000,Blessing%,brightness_5
+bless%,60,Blessing%,brightness_5
 sp/s,,Spirit Regeneration,eda
 sp/s%,2000,Spirit Regeneration%,eda
 energy,30,Energy,electric_bolt
