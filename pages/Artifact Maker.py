@@ -11,7 +11,7 @@ ingredients: list[str] = []
 additional_price: int = 0
 ingredient_stats: dict[str, float] = {}
 additional_stats: dict[str, float] = {}
-float_stats: list[str] = ["Move Speed", "Stamina Regeneration"]
+float_stats: list[str] = ["Move Speed", "Stamina Regeneration", "Spirit Regeneration"]
 
 st.session_state["price_text"] = st.session_state.get("price_text", "Price:")
 st.session_state["total_price"] = st.session_state.get("total_price", 0)
@@ -30,9 +30,8 @@ def change_item() -> None:
     for ingredient in craft_list:
         craft_ingredients[ingredient] = {
             "amount": st.session_state.get(f"{ingredient}_amount", 1),
-            "price": artifacts_df[artifacts_df["name"] == ingredient]["price"]
-            .values[0]
-            .item(),
+            "price": int(artifacts_df[artifacts_df["name"] == ingredient]["price"]
+            .values[0]),
         }
 
     price_str: str = tools.get_price_str(craft_ingredients, additional_price)
@@ -217,4 +216,4 @@ with st.container(key="craft"):
     prices_label.text(st.session_state["price_text"])
 
     total_label = st.empty()
-    total_label.text(f"***Cost***: {total_price} J$ *({ceil(total_price / 2)} J$ Sell)*")
+    total_label.text(f"***Cost***: {total_price} J$ *({ceil(total_price * .6)} J$ Sell)*")
