@@ -1,6 +1,7 @@
 stat,price,name,icon
-hp,3,Max HP,health_cross
-hp/s,200,HP Regeneration,hr_resting
+hp,4,Max HP,health_cross
+hp%,50,Max HP%,health_cross
+hp/s,300,HP Regeneration,hr_resting
 protection,30,Physicial Protection,health_and_safety
 barrier,30,Magic Barrier,arming_countdown
 resilience%,70,Condition Resilience%,arming_countdown
@@ -12,7 +13,7 @@ evasion,,Evasion%,arrows_more_up
 wp,40,Weapon Damage,surgical
 atk/s%,60,Attack Speed%,blur_medium
 atkrange,,Attack Range,target
-physvamp%,65,Life Steal%,bloodtype
+physvamp%,80,Life Steal%,bloodtype
 physpen,40,Physical Penetration,link_off
 physpen%,,Physical Shreding%,link_off
 flux,30,Flux,visibility
@@ -22,9 +23,10 @@ magvamp%,100,Soul Drain%,digital_wellbeing
 magpen,,Magic Penetration,visibility_off
 magpen%,,Magic Shreding%,visibility_off
 bless%,80,Blessing%,brightness_5
+hex%,100,Hex%,skull
 sp/s,1200,Spirit Regeneration,eda
 sp/s%,20,Spirit Regeneration%,eda
 energy,120,Energy,electric_bolt
 ammo,,Ammo%,nest_cam_outdoor
-crit,,Critical Damage%,stacks
+crit%,100,Critical Bonus%,stacks
 luck,,Luck%,nest_farsight_seasonal

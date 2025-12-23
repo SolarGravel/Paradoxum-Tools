@@ -80,7 +80,6 @@ with st.container(key="stats"):
                 additional_stats[stat] = st.number_input(
                     "Additional Stat",
                     key=f"{stat}_stat",
-                    min_value=0.0,
                     value=0.0,
                     on_change=change_item,
                     icon=f":material/{stats_df[stats_df['name'] == stat]['icon'].values[0]}:",
@@ -99,7 +98,6 @@ with st.container(key="stats"):
                 additional_stats[stat] = st.number_input(
                     "Additional Stat",
                     key=f"{stat}_stat",
-                    min_value=0,
                     value=0,
                     on_change=change_item,
                     icon=f":material/{stats_df[stats_df['name'] == stat]['icon'].values[0]}:",
@@ -121,7 +119,6 @@ with st.container(key="stats"):
                 additional_stats[stat] = st.number_input(
                     "Additional Stat",
                     key=f"{stat}_stat",
-                    min_value=0.0,
                     value=0.0,
                     on_change=change_item,
                     icon=f":material/{stats_df[stats_df['name'] == stat]['icon'].values[0]}:",
@@ -140,7 +137,6 @@ with st.container(key="stats"):
                 additional_stats[stat] = st.number_input(
                     "Additional Stat",
                     key=f"{stat}_stat",
-                    min_value=0,
                     value=0,
                     on_change=change_item,
                     icon=f":material/{stats_df[stats_df['name'] == stat]['icon'].values[0]}:",
